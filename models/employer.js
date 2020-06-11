@@ -7,7 +7,17 @@ const employerSchema = new Schema({
   },
   phone: {
     type: Number,
+    unique: true,
+    required: true
   },
+  district: {
+    type: String,
+    required: true,
+  },
+  city: {
+    type: String,
+    required: true
+  }
 });
 
 module.exports = model('Employer', employerSchema);

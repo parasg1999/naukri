@@ -20,9 +20,12 @@ mongoose.connect('mongodb://localhost:27017/naukri', {
 let port = 3000;
 
 app.post('/employer', (req, res) => {
-  const { /* GET FIELDS */ } = req.body;
+  const { name, phone, district, city } = req.body;
   const newEmployer = new Employer({
-    /** Write Fields */
+    name,
+    phone,
+    district,
+    city
   });
   newEmployer.save()
     .then((doc) => res.send(doc))
@@ -30,9 +33,11 @@ app.post('/employer', (req, res) => {
 });
 
 app.post('/employee', (req, res) => {
-  const { /* GET FIELDS */ } = req.body;
-  const newEmployer = new Employee({
-    /** Write Fields */
+  const { name, phone, skills} = req.body;
+  const newEmployee = new Employee({
+    name,
+    phone,
+    skills,
   });
   newEmployee.save()
     .then((doc) => res.send(doc))

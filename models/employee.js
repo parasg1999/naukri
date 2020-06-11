@@ -5,12 +5,14 @@ const employeeSchema = new Schema({
     type: String,
     required: true,
   },
-  gender: {
-    type: String,
-  },
   phone: {
     type: Number,
+    required: true,
+    unique: true
   },
+  skills: {
+    type: Array,
+  }
 });
 
 module.exports = model('Employee', employeeSchema);
