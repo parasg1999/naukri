@@ -3,10 +3,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 
 const app = express();
-const Employee = require('./models/employee');
-const Employer = require('./models/employer');
-
-const {getFilterObject} = require('./config/filter');
+const User = require('./models/user');
 
 app.use(bodyParser.json());
 
@@ -17,41 +14,40 @@ mongoose.connect('mongodb://localhost:27017/naukri', {
   useUnifiedTopology: true,
 });
 
-let port = 3000;
+let port = 9090;
 
-app.post('/employer', (req, res) => {
-  const { name, phone, district, city } = req.body;
-  const newEmployer = new Employer({
+app.post('/user', (req, res) => {
+  const { name, phone, district, pincode, uid, skills, isEmployee } = req.body;
+  const newUser = new User({
+    isEmployee,
     name,
     phone,
     district,
-    city
-  });
-  newEmployer.save()
-    .then((doc) => res.send(doc))
-    .catch((e) => res.status(400).send(e))
-});
-
-app.post('/employee', (req, res) => {
-  const { name, phone, skills} = req.body;
-  const newEmployee = new Employee({
-    name,
-    phone,
+    pincode,
+    uid,
     skills,
   });
-  newEmployee.save()
+  newUser.save()
     .then((doc) => res.send(doc))
     .catch((e) => res.status(400).send(e))
 });
 
-app.get('/employee', (req, res) => {
-  var str = getFilterObject(req.body);
-  Employee.find(str)
+app.get('/searchEmployees', (req, res) => {
+  const {pincode, skill} = req.query;
+  User.find({pincode, skills : skill, isEmployee: true })
     .then(employees => {
-      // console.log(employees.length);
       return res.send(employees);
     })
     .catch(e => res.status(400).send(e));
-})
+});
 
-app.listen(3000, () => { console.log(`Server is up on port ${port}`); });
+app.get('/user', (req, res) => {
+  const {uid} = req.query;
+  User.findOne({uid})
+    .then(doc => {
+      return res.send(doc);
+    })
+    .catch(e => res.status(400).send(e));
+});
+
+app.listen(port, () => { console.log(`Server is up on port ${port}`); });
