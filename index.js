@@ -50,4 +50,12 @@ app.get('/user', (req, res) => {
     .catch(e => res.status(400).send(e));
 });
 
+app.get('/all', (req,res) => {
+  User.find()
+  .then(doc => {
+    return res.send(doc);
+  })
+  .catch(e => res.status(400).send(e));
+})
+
 app.listen(port, () => { console.log(`Server is up on port ${port}`); });
